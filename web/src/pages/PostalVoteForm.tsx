@@ -135,8 +135,8 @@ const getRecaptchaToken = (): Promise<string | undefined> => {
       const grecaptcha = (window as any).grecaptcha;
 
       grecaptcha.ready(() => {
-        grecaptcha.execute(env.RECAPTCHA_V3_SITE_KEY, { action: 'submit' }).then((token: string) => {
-          resolve(token)
+        grecaptcha.execute(env.RECAPTCHA_V3_SITE_KEY, { action: 'submit' }).then((token: string | null) => {
+          resolve(token ?? undefined)
         });
       });
     } else {

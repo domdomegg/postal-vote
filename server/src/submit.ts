@@ -76,7 +76,7 @@ const handler = async (event: APIGatewayProxyEventV2, _context: Context): Promis
 
     await transporter.sendMail({
         from: {
-            name: 'Apply for a postal vote service',
+            name: 'Postal Vote Service',
             address: 'postalvoteapp@gmail.com',
         },
         to: [{
