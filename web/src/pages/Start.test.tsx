@@ -1,0 +1,24 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Start from './Start';
+import userEvent from '@testing-library/user-event';
+
+test('renders apply for a postal vote text', () => {
+  render(<Start onStart={() => { }} />);
+  expect(screen.getByText(/Apply for a postal vote/i)).toBeInTheDocument();
+});
+
+test('clicking button triggers onStart', () => {
+  // Given... start page with callback
+  const onStart = jest.fn();
+  render(<Start onStart={onStart} />);
+
+  // Then... callback not automatically called
+  expect(onStart).not.toHaveBeenCalled()
+
+  // When... start button pressed
+  userEvent.click(screen.getByText(/Start now/i))
+
+  // Then... onStart callback called
+  expect(onStart).toHaveBeenCalledTimes(1)
+});

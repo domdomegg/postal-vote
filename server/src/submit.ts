@@ -23,7 +23,7 @@ const handler = async (event: APIGatewayProxyEventV2, _context: Context): Promis
         throw new createHttpError.BadRequest(`Request body was not the right structure: ${[validate.errors?.map((e) => `body${e.instancePath} ${e.message}`)].join(', ')}`)
     }
 
-    const pdf = Buffer.from(await makePDF(body))
+    const pdf = await makePDF(body)
 
     const fullName = `${body.firstName} ${body.lastName}`
 

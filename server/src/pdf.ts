@@ -49,7 +49,7 @@ const templateSigLocation = {
     x: 316, y: 155, width: 242, height: 242 / 3.24324324,
 }
 
-const makePDF = async (data: Request): Promise<Uint8Array> => {
+const makePDF = async (data: Request): Promise<Buffer> => {
     const pdfDoc = await PDFDocument.load(template)
     const page = pdfDoc.getPages()[0]
     const helveticaFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold)
@@ -101,7 +101,7 @@ const makePDF = async (data: Request): Promise<Uint8Array> => {
 
     pdfDoc.setProducer('postal-vote (https://github.com/domdomegg/postal-vote)')
 
-    const pdfBytes = await pdfDoc.save()
+    const pdfBytes = Buffer.from(await pdfDoc.save())
 
     return pdfBytes
 }

@@ -54,17 +54,10 @@
     "jest": {
         "preset": "ts-jest",
         "testEnvironment": "node",
-        "globalSetup": "./local/test-setup-global.js",
-        "globalTeardown": "./local/test-teardown.js",
-        "setupFilesAfterEnv": [
-            "./local/test-setup-env.ts"
-        ],
         "collectCoverageFrom": [
             "src/**/*.ts",
             "!src/env/*.ts",
             "src/env/env.ts"
-        ],
-        "clearMocks": true,
-        "restoreMocks": true
+        ]
     }
 }

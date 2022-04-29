@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
 import { GlobalStyle, TopNav, Page, PhaseBanner, Link, GridRow, GridCol } from 'govuk-react';
-import Start from './pages/start';
+import Start from './pages/Start';
 import IsRegisteredForm from './pages/IsRegisteredForm';
 import NeedsRegistration from './pages/NeedsRegistration';
 import PostalVoteForm from './pages/PostalVoteForm';
