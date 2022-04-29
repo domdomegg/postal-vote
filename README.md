@@ -1,46 +1,26 @@
-# Getting Started with Create React App
+# postal-vote
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This service allows users to apply for postal votes in England, Scotland and Wales.
 
-## Available Scripts
+## Quick start
 
-In the project directory, you can run:
+1. Install [Node.js](https://nodejs.org/) 
+2. Clone this repository
+3. Start the web app with `cd web && npm install && npm start`
+4. Start the server with `cd server && npm install && npm start`
 
-### `npm start`
+## Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- `web`: Website that hosts a webform for users to determine their eligibility for postal voting, collect their details, and interact with the API. Written in [TypeScript](https://www.typescriptlang.org/), using [React](https://reactjs.org/), [govuk-react](https://github.com/govuk-react/govuk-react/) and [signature_pad](https://github.com/szimek/signature_pad), bootstrapped with [create-react-app](https://github.com/facebook/create-react-app/). In production, hosted on GitHub pages.
+- `server`: API for creating the PDF application, looking up user's council and emailing the form. Written in [TypeScript](https://www.typescriptlang.org/), using [Serverless](https://www.serverless.com/), [serverless-offline-ses-v2](https://github.com/domdomegg/serverless-offline-ses-v2), [pdf-lib](https://github.com/Hopding/pdf-lib) and [nodemailer](https://nodemailer.com/about/). In production, hosted in AWS.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Legality of electronic signatures
 
-### `npm test`
+Regulation 6 (Electronic signatures and related certificates) of The Representation of the People (England and Wales) Regulations 2001 states "A requirement in these Regulations for an application, notice or objection to be signed is satisfied [...] where there is an electronic signature incorporated into or logically associated with a particular electronic communication, and the certification by any person of such a signature."
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+Regulation 51 (General requirements for applications for an absent vote) of The Representation of the People (England and Wales) Regulations 2001 sets out requirements for what the absent vote application must state and that it must be signed.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Together, these mean electoral registration offices should accept electronic signatures. From experience, all the councils I've dealt with are happy to handle e-signed applications.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The Electoral Commision also has more [guidance on the regulations around requirements for postal votes](https://www.electoralcommission.org.uk/running-electoral-registration-england/absent-voting/postal-voting/what-are-prescribed-requirements-personal-identifiers).

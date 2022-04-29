@@ -1,5 +1,5 @@
 {
-  "name": "postal-vote",
+  "name": "@domdomegg/postal-vote-web",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -15,7 +15,6 @@
     "@types/react-dom": "^18.0.2",
     "@types/styled-components": "^5.1.25",
     "govuk-react": "^0.10.1",
-    "pdf-lib": "^1.17.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.30.0",
@@ -27,8 +26,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "postinstall": "cp -n src/env/local.template.ts src/env/local.ts && cp -n src/env/local.ts src/env/env.ts",
+    "start": "npm run start:local",
+    "start:local": "cp src/env/local.ts src/env/env.ts && PORT=8000 react-scripts start",
+    "build": "npm run build:local",
+    "build:local": "cp src/env/local.ts src/env/env.ts && react-scripts build",
+    "build:dev": "cp src/env/dev.ts src/env/env.ts && react-scripts build",
+    "build:prod": "cp src/env/prod.ts src/env/env.ts && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

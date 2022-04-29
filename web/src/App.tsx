@@ -1,7 +1,6 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckToSlot } from '@fortawesome/free-solid-svg-icons';
-import { GlobalStyle, TopNav, Page, PhaseBanner, Link, GridRow, GridCol, Panel, Paragraph, Heading } from 'govuk-react';
+import { GlobalStyle, TopNav, Page, PhaseBanner, Link, GridRow, GridCol } from 'govuk-react';
 import Start from './pages/start';
 import IsRegisteredForm from './pages/IsRegisteredForm';
 import NeedsRegistration from './pages/NeedsRegistration';
@@ -19,7 +18,7 @@ const App = () => {
       <TopNav
         company={<TopNav.Anchor as={ReactRouterLink} to="/">
           <TopNav.IconTitle icon={<FontAwesomeIcon icon={faCheckToSlot} height={32} />}>
-            eDemocracy
+            postal-vote
           </TopNav.IconTitle>
         </TopNav.Anchor>}
         serviceTitle={<TopNav.NavLink as={ReactRouterLink} to="/">
@@ -28,7 +27,7 @@ const App = () => {
       />
       <Page.WidthContainer>
         <PhaseBanner level="alpha">
-          This is a new service – your <Link href="https://github.com/domdomegg/postal-vote">feedback</Link> will help us to improve it.
+          This is a new service – your <Link href="https://github.com/domdomegg/postal-vote" target="_blank" rel="noreferrer">feedback</Link> will help us to improve it.
         </PhaseBanner>
         <Page.Main>
           <GridRow>
@@ -50,36 +49,13 @@ const App = () => {
                   <NorthernIreland />
                 } />
                 <Route path="/postal-vote-form/*" element={
-                  <PostalVoteForm onSuccess={() => navigate('/success')} />
-                } />
-                <Route path="/success" element={
-                  <Success />
+                  <PostalVoteForm />
                 } />
               </Routes>
             </GridCol>
           </GridRow>
         </Page.Main>
       </Page.WidthContainer>
-    </>
-  )
-}
-
-// TODO: should this live in the PostalVoteForm?
-// because then we can more easily display things like who their
-// ERO is, and know whether we actually did send them an email
-const Success = () => {
-  return (
-    <>
-      <Heading size="XLARGE">Sending your form</Heading>
-      <Paragraph>We've opened your application form in your browser. Download it and email it to your local electoral registration office.</Paragraph>
-      <Paragraph>They will contact you either to confirm your postal vote, or to ask for more information.</Paragraph>
-
-      {/* TODO: uncomment once we have server-side version */}
-      {/* <Panel title="Application complete" />
-      <Paragraph mb={8}>If you provided your email address, we have sent you a confirmation.</Paragraph>
-      <Heading size="LARGE">What happens next</Heading>
-      <Paragraph>We’ve sent your application to your local electoral register office.</Paragraph>
-      <Paragraph>They will contact you either to confirm your postal vote, or to ask for more information.</Paragraph> */}
     </>
   )
 }
