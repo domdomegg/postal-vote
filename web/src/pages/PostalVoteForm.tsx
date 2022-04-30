@@ -182,7 +182,8 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
     if (!postcodeRegex.test(value.replace(/\s/g, ''))) return 'Please enter a valid postcode';
   }
   const validateEmail = (value?: string): string | undefined => {
-    if (value && !emailRegex.test(value.trim())) return 'Please enter a valid email';
+    if (value === undefined || value.length === 0) return 'Please enter your email';
+    if (!emailRegex.test(value.trim())) return 'Please enter a valid email';
     return
   }
   const validateAlternativeAddressReasonOther = (value?: string): string | undefined => value?.length ? undefined : 'Please enter a reason';
@@ -227,7 +228,7 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         input={form.register('email', { validate: validateEmail })}
       // autoComplete="email"
       >
-        Email address (optional)
+        Email address
       </InputField>
       <InputField
         mb={8}
@@ -417,7 +418,7 @@ const PostalVoteFormPage2 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
     />
 
     <Details summary="I can't provide a signature">
-      <p>If you can't provide a signature or consistent signature due to a disability or inability to read or write, you should <Link href="https://www.gov.uk/contact-electoral-registration-office" target="_blank" rel="noreferrer">contact your local electoral registration office</Link>.</p>
+      <p>If you can't provide a signature or consistent signature due to a disability or inability to read or write, you should <Link href={`https://www.gov.uk/contact-electoral-registration-office?postcode=${encodeURIComponent(form.watch('addressPostcode'))}`} target="_blank" rel="noreferrer">contact your local electoral registration office</Link>.</p>
 
       <p>The Electoral Commision website has <Link href="https://www.electoralcommission.org.uk/running-electoral-registration-wales/absent-voting/postal-voting/signature-waivers-postal-vote-applications" target="_blank" rel="noreferrer">additional guidance about signature waivers for postal votes</Link>.</p>
     </Details>
