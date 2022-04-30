@@ -35,7 +35,20 @@ jobs:
         run: npm run test --if-present
         working-directory: web
 
-      - name: "Deploy"
+      - name: "dev: Build"
+        run: npm run build:dev --if-present
+        working-directory: web
+      - name: "dev: Deploy"
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GH_PAT }}
+          external_repository: domdomegg/postal-vote-dev
+          publish_dir: ./web/build
+
+      - name: "prod: Build"
+        run: npm run build:prod --if-present
+        working-directory: web
+      - name: "prod: Deploy"
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
