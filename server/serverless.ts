@@ -13,7 +13,7 @@ const getVersion = (): string => {
 
 const serverlessConfiguration: AWS = {
     service: SERVICE_NAME,
-    frameworkVersion: '2',
+    frameworkVersion: '3',
     custom: {
         webpack: {
             webpackConfig: './webpack.config.js',
