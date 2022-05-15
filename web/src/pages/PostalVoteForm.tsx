@@ -198,25 +198,22 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.firstName?.message, touched: true }}
-        input={form.register('firstName', { validate: validateFirstName })}
-      // autoComplete="given-name"
+        input={{ autoComplete: 'given-name', ...form.register('firstName', { validate: validateFirstName }) }}
       >
         First name
       </InputField>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.lastName?.message, touched: true }}
-        input={form.register('lastName', { validate: validateLastName })}
-      // autoComplete="family-name"
+        input={{ autoComplete: 'family-name', ...form.register('lastName', { validate: validateLastName }) }}
       >
         Last name
       </InputField>
       <RHFDateField
         mb={8}
         errorText={(form.formState.errors?.dob as undefined | { message: string })?.message}
-        input={form.register('dob', {
-          validate: validateDOB,
-        })}
+        input={form.register('dob', { validate: validateDOB })}
+      // TODO: autocomplete
       >
         Date of birth
       </RHFDateField>
@@ -225,16 +222,14 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.email?.message, touched: true }}
-        input={form.register('email', { validate: validateEmail })}
-      // autoComplete="email"
+        input={{ autoComplete: 'email', ...form.register('email', { validate: validateEmail }) }}
       >
         Email address
       </InputField>
       <InputField
         mb={8}
         meta={{ error: form.formState.errors.phone?.message, touched: true }}
-        input={form.register('phone')}
-      // autoComplete="tel"
+        input={{ autoComplete: 'tel', ...form.register('phone') }}
       >
         Phone number (optional)
       </InputField>
@@ -244,24 +239,21 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.addressLine1?.message, touched: true }}
-        input={form.register('addressLine1', { validate: validateAddressLine1 })}
-      // autoComplete="address-line1"
+        input={{ autoComplete: 'address-line1', ...form.register('addressLine1', { validate: validateAddressLine1 }) }}
       >
         Address line 1
       </InputField>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.addressLine2?.message, touched: true }}
-        input={form.register('addressLine2')}
-      // autoComplete="address-line2"
+        input={{ autoComplete: 'address-line2', ...form.register('addressLine2') }}
       >
         Address line 2 (optional)
       </InputField>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.addressLine3?.message, touched: true }}
-        input={form.register('addressLine3')}
-        // autoComplete="address-level2"
+        input={{ autoComplete: 'address-level2', ...form.register('addressLine3') }}
         // @ts-ignore
         style={{ width: 'calc(max(66%, 16rem))' }}
       >
@@ -270,8 +262,7 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
       <InputField
         mb={4}
         meta={{ error: form.formState.errors.addressPostcode?.message, touched: true }}
-        input={form.register('addressPostcode', { validate: validatePostcode })}
-        // autoComplete="postal-code"
+        input={{ autoComplete: 'postal-code', ...form.register('addressPostcode', { validate: validatePostcode }) }}
         // @ts-ignore
         style={{ width: '16rem' }}
       >
@@ -290,28 +281,27 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         <InputField
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressLine1?.message, touched: true }}
-          input={form.register('alternativeAddressLine1', {
-            validate: (s) => {
-              if (form.watch('useAlternativeAddress', false)) return validateAddressLine1(s)
-            }
-          })}
-        // autoComplete="address-line1"
+          input={{
+            autoComplete: 'address-line1', ...form.register('alternativeAddressLine1', {
+              validate: (s) => {
+                if (form.watch('useAlternativeAddress', false)) return validateAddressLine1(s)
+              }
+            })
+          }}
         >
           Address line 1
         </InputField>
         <InputField
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressLine2?.message, touched: true }}
-          input={form.register('alternativeAddressLine2')}
-        // autoComplete="address-line2"
+          input={{ autoComplete: 'address-line2', ...form.register('alternativeAddressLine2') }}
         >
           Address line 2 (optional)
         </InputField>
         <InputField
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressLine3?.message, touched: true }}
-          input={form.register('alternativeAddressLine3')}
-          // autoComplete="address-level2"
+          input={{ autoComplete: 'address-level2', ...form.register('alternativeAddressLine3') }}
           // @ts-ignore
           style={{ width: 'calc(max(66%, 16rem))' }}
         >
@@ -320,12 +310,13 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         <InputField
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressPostcode?.message, touched: true }}
-          input={form.register('alternativeAddressPostcode', {
-            validate: (s) => {
-              if (form.watch('useAlternativeAddress', false)) return validatePostcode(s)
-            }
-          })}
-          // autoComplete="postal-code"
+          input={{
+            autoComplete: 'postal-code', ...form.register('alternativeAddressPostcode', {
+              validate: (s) => {
+                if (form.watch('useAlternativeAddress', false)) return validatePostcode(s)
+              }
+            })
+          }}
           // @ts-ignore
           style={{ width: '16rem' }}
         >
