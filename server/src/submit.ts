@@ -8,6 +8,7 @@ import { transporter } from './email'
 import makePDF from './pdf'
 import { schema } from './validation'
 import env from './env/env'
+import 'source-map-support/register'
 
 const ajv = new Ajv({ strict: true })
 const validate = ajv.compile(schema)

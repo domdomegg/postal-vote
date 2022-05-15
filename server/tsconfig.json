@@ -11,6 +11,7 @@
         "forceConsistentCasingInFileNames": true,
         "moduleResolution": "node",
         "noEmit": true,
+        "sourceMap": true,
         "allowSyntheticDefaultImports": true
     },
     "include": [
