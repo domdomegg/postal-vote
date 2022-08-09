@@ -8,7 +8,9 @@ test('renders apply for a postal vote text', () => {
   expect(screen.getByText(/Apply for a postal vote/i)).toBeInTheDocument();
 });
 
-test('clicking button triggers onStart', () => {
+test('clicking button triggers onStart', async () => {
+  const user = userEvent.setup()
+
   // Given... start page with callback
   const onStart = jest.fn();
   render(<Start onStart={onStart} />);
@@ -17,7 +19,7 @@ test('clicking button triggers onStart', () => {
   expect(onStart).not.toHaveBeenCalled()
 
   // When... start button pressed
-  userEvent.click(screen.getByText(/Start now/i))
+  await user.click(screen.getByText(/Start now/i))
 
   // Then... onStart callback called
   expect(onStart).toHaveBeenCalledTimes(1)
