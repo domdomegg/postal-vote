@@ -1,6 +1,6 @@
 # postal-vote [(view live)](https://domdomegg.github.io/postal-vote/)
 
-This service allows users to apply for postal votes in England, Scotland and Wales.
+This (unofficial) service allows users to apply for postal votes in England, Scotland and Wales.
 
 ## How it works
 
