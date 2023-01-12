@@ -1,4 +1,4 @@
-# postal-vote [(view live)](https://domdomegg.github.io/postal-vote/)
+# postal-vote [(view live)](https://adamjones.me/postal-vote/)
 
 This (unofficial) service allows users to apply for postal votes in England, Scotland and Wales.
 
@@ -38,9 +38,9 @@ You can edit the files in `server/src` and `web/src` and your app will automatic
 
 This section describes the dev and production architecture of the app.
 
-This live site is hosted at [domdomegg.github.io/postal-vote](https://domdomegg.github.io/postal-vote/).
+This live site is hosted at [adamjones.me/postal-vote](https://adamjones.me/postal-vote/).
 
-The dev site is hosted at [domdomegg.github.io/postal-vote-dev](https://domdomegg.github.io/postal-vote-dev/).
+The dev site is hosted at [adamjones.me/postal-vote-dev](https://adamjones.me/postal-vote-dev/).
 
 The website is built with React as a static SPA, which is distributed to GitHub pages using GitHub actions to both the dev and prod sites automatically on commits to master. To have separate prod and dev websites there's an additional GitHub repository, [postal-vote-dev](https://github.com/domdomegg/postal-vote-dev), to act as the source repo for GitHub pages for the dev version. Because of limitations in GitHub pages (e.g. can't set redirect rules) we use the hash router from [react-router](https://reactrouter.com/) for routing, so everything is served from `/index.html`. This also has good compatiblity with the form library we use, [react-hook-form](https://react-hook-form.com/).
 
