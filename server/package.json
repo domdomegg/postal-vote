@@ -1,9 +1,9 @@
 {
-    "name": "@domdomegg/postal-vote-server",
+    "name": "server",
     "private": true,
     "main": "serverless.ts",
     "scripts": {
-        "postinstall": "cp -n src/env/local.template.ts src/env/local.ts && cp -n src/env/local.ts src/env/env.ts",
+        "postinstall": "shx cp -n src/env/local.template.ts src/env/local.ts && shx cp -n src/env/local.ts src/env/env.ts",
         "start": "npm run start:local",
         "start:local": "cp src/env/local.ts src/env/env.ts && serverless offline start",
         "deploy:dev": "cp src/env/dev.ts src/env/env.ts && serverless deploy --verbose",
@@ -47,6 +47,7 @@
         "serverless-offline": "^12.0.3",
         "serverless-offline-ses-v2": "^1.0.1",
         "serverless-webpack": "^5.7.1",
+        "shx": "^0.3.4",
         "ts-jest": "^27.0.7",
         "ts-loader": "^9.2.6",
         "ts-node": "^10.2.1",

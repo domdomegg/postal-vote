@@ -1,0 +1,30 @@
+# dependencies
+node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+
+npm-debug.log*
+
+# Serverless (and plugins) directories
+.serverless
+.webpack
+.dynamodb
+
+# Web custom environment
+web/src/env/env.ts
+web/src/env/local.ts
+# local is .gitignored so custom changes aren't committed accidentally
+# dev and prod configs can be public as they should not have secrets
+
+# Server custom environment
+server/src/env/env.ts
+server/src/env/local.ts
+server/src/env/dev.ts
+server/src/env/prod.ts

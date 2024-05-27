@@ -24,7 +24,6 @@ jobs:
 
       - name: "Install dependencies"
         run: npm ci
-        working-directory: web
       - name: "Lint"
         run: npm run lint --if-present
         working-directory: web

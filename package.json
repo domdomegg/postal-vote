@@ -1,0 +1,17 @@
+
+{
+    "name": "postal-vote",
+    "workspaces": [
+      "server",
+      "web"
+    ],
+    "private": true,
+    "scripts": {
+      "postinstall": "npm run postinstall --workspaces --if-present",
+      "start": "npm run start --workspaces --if-present",
+      "test": "npm run test --workspaces --if-present",
+      "lint": "npm run lint --workspaces --if-present",
+      "build": "npm run build --workspaces --if-present"
+    }
+  }
+  
