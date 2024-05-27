@@ -1,11 +1,11 @@
-import type { Env } from "../types"
+import type { Env } from '../types';
 
 const env: Env = {
-  STAGE: "dev",
+  STAGE: 'dev',
 
-  API_BASE_URL: "https://1vti3u2qk1.execute-api.eu-west-1.amazonaws.com",
+  API_BASE_URL: 'https://1vti3u2qk1.execute-api.eu-west-1.amazonaws.com',
 
-  RECAPTCHA_V3_SITE_KEY: "6LfZqq0fAAAAAIxbz8FaOa4SKQeefeISd6TCN6AN",
-}
+  RECAPTCHA_V3_SITE_KEY: '6LfZqq0fAAAAAIxbz8FaOa4SKQeefeISd6TCN6AN',
+};
 
-export default env
+export default env;

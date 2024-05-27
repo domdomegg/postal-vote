@@ -1,10 +1,12 @@
-import { Button, Fieldset, MultiChoice, Radio } from "govuk-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  Button, Fieldset, MultiChoice, Radio,
+} from 'govuk-react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const IsRegisteredForm = ({ onRegistered, onNotRegistered }: { onRegistered: () => void, onNotRegistered: () => void }) => {
   type TFieldValues = {
     isRegistered: 'yes' | 'no'
-  }
+  };
 
   const {
     register,
@@ -12,15 +14,15 @@ const IsRegisteredForm = ({ onRegistered, onNotRegistered }: { onRegistered: () 
     formState: { errors, submitCount, isSubmitting },
   } = useForm<TFieldValues>({
     reValidateMode: 'onSubmit',
-  })
+  });
 
-  const validateAnswered = (value?: string): string | undefined => value?.length ? undefined : 'Please select an option';
+  const validateAnswered = (value?: string): string | undefined => (value?.length ? undefined : 'Please select an option');
 
   const onSubmit: SubmitHandler<TFieldValues> = ({ isRegistered }) => {
-    if (isRegistered === 'yes') return onRegistered()
-    if (isRegistered === 'no') return onNotRegistered()
-    throw new Error('Invalid value for isRegistered field: ' + isRegistered)
-  }
+    if (isRegistered === 'yes') return onRegistered();
+    if (isRegistered === 'no') return onNotRegistered();
+    throw new Error(`Invalid value for isRegistered field: ${isRegistered}`);
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -65,7 +67,7 @@ const IsRegisteredForm = ({ onRegistered, onNotRegistered }: { onRegistered: () 
         </Button>
       </Fieldset>
     </form>
-  )
-}
+  );
+};
 
-export default IsRegisteredForm
+export default IsRegisteredForm;

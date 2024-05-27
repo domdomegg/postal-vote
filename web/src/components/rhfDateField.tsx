@@ -1,6 +1,6 @@
-import React from "react";
-import { DateField } from 'govuk-react'
-import { DateFieldProps } from "@govuk-react/date-field";
+import React from 'react';
+import { DateField } from 'govuk-react';
+import type { DateFieldProps } from '@govuk-react/date-field';
 
 const RHFDateField: React.FC<{
   input: {
@@ -41,12 +41,12 @@ const RHFDateField: React.FC<{
           setValue({ ...value, ...newValue });
           onChange({ target: { value: { ...value, ...newValue }, name: input.name } });
         },
-        onBlur: (newValue) => onBlur({ target: { value, name: input.name } }),
+        onBlur: () => onBlur({ target: { value, name: input.name } }),
         ...input,
       }}
     >
       {children}
-    </DateField >
+    </DateField>
   );
 };
 

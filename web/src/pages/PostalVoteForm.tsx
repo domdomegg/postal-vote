@@ -1,10 +1,12 @@
-import React, { useEffect } from "react"
-import { Button, Checkbox, Details, ErrorText, Fieldset, FormGroup, Heading, HintText, InputField, LabelText, Link, Panel, Paragraph, Select } from "govuk-react"
-import { SubmitHandler, useForm, UseFormReturn } from "react-hook-form"
-import RHFDateField from "../components/rhfDateField"
-import SignaturePadLib from "signature_pad"
-import { Route, Routes, useNavigate } from "react-router-dom"
-import env from "../env/env"
+import React, { useEffect } from 'react';
+import {
+  Button, Checkbox, Details, ErrorText, Fieldset, FormGroup, Heading, HintText, InputField, LabelText, Link, Panel, Paragraph, Select,
+} from 'govuk-react';
+import { SubmitHandler, useForm, UseFormReturn } from 'react-hook-form';
+import SignaturePadLib from 'signature_pad';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import RHFDateField from '../components/rhfDateField';
+import env from '../env/env';
 
 type TFieldValues = {
   firstName: string,
@@ -25,7 +27,7 @@ type TFieldValues = {
   alternativeAddressReasonOther: string,
   signatureProvided: boolean,
   signatureDataUri: string,
-}
+};
 
 interface Request {
   firstName: string,
@@ -47,17 +49,17 @@ interface Request {
   recaptchaToken?: string,
 }
 
-const PAGE_1_FIELDS = ['firstName', 'lastName', 'dob', 'email', 'phone', 'addressLine1', 'addressLine2', 'addressLine3', 'addressPostcode', 'useAlternativeAddress', 'alternativeAddressLine1', 'alternativeAddressLine2', 'alternativeAddressLine3', 'alternativeAddressPostcode', 'alternativeAddressReason', 'alternativeAddressReasonOther'] as const
+const PAGE_1_FIELDS = ['firstName', 'lastName', 'dob', 'email', 'phone', 'addressLine1', 'addressLine2', 'addressLine3', 'addressPostcode', 'useAlternativeAddress', 'alternativeAddressLine1', 'alternativeAddressLine2', 'alternativeAddressLine3', 'alternativeAddressPostcode', 'alternativeAddressReason', 'alternativeAddressReasonOther'] as const;
 
 const postcodeRegex = /^([A-PR-UWYZ0-9][A-HK-Y0-9][AEHMNPRTVXY0-9]?[ABEHMNPRVWXY0-9]?[0-9][ABD-HJLN-UW-Z]{2}|GIR0AA)$/i;
-const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
 const PostalVoteForm = () => {
-  const form = useForm<TFieldValues>({ reValidateMode: 'onSubmit' })
-  const navigate = useNavigate()
+  const form = useForm<TFieldValues>({ reValidateMode: 'onSubmit' });
+  const navigate = useNavigate();
 
-  const [councilName, setCouncilName] = React.useState<string | null>(null)
-  const [pdf, setPdf] = React.useState<string | null>(null)
+  const [councilName, setCouncilName] = React.useState<string | null>(null);
+  const [pdf, setPdf] = React.useState<string | null>(null);
 
   const onSubmit: SubmitHandler<TFieldValues> = async (data) => {
     const dob = String(Number(data.dob.day)).padStart(2, '0') + String(Number(data.dob.month)).padStart(2, '0') + String(Number(data.dob.year));
@@ -83,73 +85,88 @@ const PostalVoteForm = () => {
       signatureDataUri: data.signatureDataUri,
       date,
       recaptchaToken: await getRecaptchaToken(),
-    }
+    };
 
-    const submitResponse = await fetch(env.API_BASE_URL + '/submit', {
+    const submitResponse = await fetch(`${env.API_BASE_URL}/submit`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(request)
+      body: JSON.stringify(request),
     });
     const content: { message: string, councilName?: string, pdf?: string } = await submitResponse.json();
 
     if (submitResponse.status === 200) {
       if (content.councilName) {
-        setCouncilName(content.councilName)
+        setCouncilName(content.councilName);
       }
-      navigate('/postal-vote-form/success')
+      navigate('/postal-vote-form/success');
     } else if (submitResponse.status === 404 && content.pdf) {
-      setPdf(content.pdf)
-      navigate('/postal-vote-form/manual')
+      setPdf(content.pdf);
+      navigate('/postal-vote-form/manual');
     } else {
-      alert(`Error: status ${submitResponse.status} from API, with body: ${JSON.stringify(content)}.`)
-      console.error(submitResponse)
+      alert(`Error: status ${submitResponse.status} from API, with body: ${JSON.stringify(content)}.`);
+      console.error(submitResponse);
     }
-  }
+  };
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <Routes>
-        <Route path="/your-details" element={
-          <PostalVoteFormPage1 form={form} />
-        } />
-        <Route path="/declaration" element={
-          <PostalVoteFormPage2 form={form} />
-        } />
-        <Route path="/success" element={
-          <Success councilName={councilName} />
-        } />
-        {pdf && <Route path="/manual" element={
-          <Manual pdf={pdf} postcode={form.watch('addressPostcode')} />
-        } />}
+        <Route
+          path="/your-details"
+          element={
+            <PostalVoteFormPage1 form={form} />
+        }
+        />
+        <Route
+          path="/declaration"
+          element={
+            <PostalVoteFormPage2 form={form} />
+        }
+        />
+        <Route
+          path="/success"
+          element={
+            <Success councilName={councilName} />
+        }
+        />
+        {pdf && (
+        <Route
+          path="/manual"
+          element={
+            <Manual pdf={pdf} postcode={form.watch('addressPostcode')} />
+        }
+        />
+        )}
       </Routes>
     </form>
-  )
-}
+  );
+};
 
 const getRecaptchaToken = (): Promise<string | undefined> => {
   return new Promise((resolve) => {
     if ('grecaptcha' in window) {
-      const grecaptcha = (window as any).grecaptcha;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { grecaptcha } = (window as any);
 
       grecaptcha.ready(() => {
         grecaptcha.execute(env.RECAPTCHA_V3_SITE_KEY, { action: 'submit' }).then((token: string | null) => {
-          resolve(token ?? undefined)
+          resolve(token ?? undefined);
         });
       });
     } else {
-      resolve(undefined)
+      resolve(undefined);
     }
-  })
-}
+  });
+};
 
 const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const validateFirstName = (value?: string): string | undefined => value?.length ? undefined : 'Please enter your first name';
-  const validateLastName = (value?: string): string | undefined => value?.length ? undefined : 'Please enter your last name';
+  const validateFirstName = (value?: string): string | undefined => (value?.length ? undefined : 'Please enter your first name');
+  const validateLastName = (value?: string): string | undefined => (value?.length ? undefined : 'Please enter your last name');
   const validateDOB: (value?: {
     year?: number | string;
     month?: number | string;
@@ -162,13 +179,13 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
       const testDate = new Date(year, month, day);
       if (
         // Check date is in the past
-        testDate < new Date() &&
+        testDate < new Date()
         // Is after 1900
-        testDate.getFullYear() > 1900 &&
+        && testDate.getFullYear() > 1900
         // and a real date resolves to the inputted date (e.g. month is not 13, not 29th February on a non leap year)
-        testDate.getFullYear() === year &&
-        testDate.getMonth() === month &&
-        testDate.getDate() === day
+        && testDate.getFullYear() === year
+        && testDate.getMonth() === month
+        && testDate.getDate() === day
       ) {
         return undefined;
       }
@@ -176,17 +193,18 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
     }
     return 'Please enter your date of birth';
   };
-  const validateAddressLine1 = (value?: string): string | undefined => value?.length ? undefined : 'Please enter your address';
+  const validateAddressLine1 = (value?: string): string | undefined => (value?.length ? undefined : 'Please enter your address');
   const validatePostcode = (value?: string): string | undefined => {
     if (value === undefined || value.length === 0) return 'Please enter your postcode';
     if (!postcodeRegex.test(value.replace(/\s/g, ''))) return 'Please enter a valid postcode';
-  }
+    return undefined;
+  };
   const validateEmail = (value?: string): string | undefined => {
     if (value === undefined || value.length === 0) return 'Please enter your email';
     if (!emailRegex.test(value.trim())) return 'Please enter a valid email';
-    return
-  }
-  const validateAlternativeAddressReasonOther = (value?: string): string | undefined => value?.length ? undefined : 'Please enter a reason';
+    return undefined;
+  };
+  const validateAlternativeAddressReasonOther = (value?: string): string | undefined => (value?.length ? undefined : 'Please enter a reason');
 
   return (
     <Fieldset>
@@ -234,7 +252,6 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         Phone number (optional)
       </InputField>
 
-
       <HintText>Enter the address where you are registered to vote.</HintText>
       <InputField
         mb={4}
@@ -254,7 +271,6 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         mb={4}
         meta={{ error: form.formState.errors.addressLine3?.message, touched: true }}
         input={{ autoComplete: 'address-level2', ...form.register('addressLine3') }}
-        // @ts-ignore
         style={{ width: 'calc(max(66%, 16rem))' }}
       >
         Town or city (optional)
@@ -263,7 +279,6 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         mb={4}
         meta={{ error: form.formState.errors.addressPostcode?.message, touched: true }}
         input={{ autoComplete: 'postal-code', ...form.register('addressPostcode', { validate: validatePostcode }) }}
-        // @ts-ignore
         style={{ width: '16rem' }}
       >
         Postcode
@@ -276,17 +291,20 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
         Send my ballot paper to a different address
       </Checkbox>
 
-      {form.watch('useAlternativeAddress', false) && <>
+      {form.watch('useAlternativeAddress', false) && (
+      <>
         <HintText margin={{ direction: 'top', size: 4 }}>Enter the address where you want your ballot paper sent.</HintText>
         <InputField
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressLine1?.message, touched: true }}
           input={{
-            autoComplete: 'address-line1', ...form.register('alternativeAddressLine1', {
+            autoComplete: 'address-line1',
+            ...form.register('alternativeAddressLine1', {
               validate: (s) => {
-                if (form.watch('useAlternativeAddress', false)) return validateAddressLine1(s)
-              }
-            })
+                if (form.watch('useAlternativeAddress', false)) return validateAddressLine1(s);
+                return undefined;
+              },
+            }),
           }}
         >
           Address line 1
@@ -302,7 +320,6 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressLine3?.message, touched: true }}
           input={{ autoComplete: 'address-level2', ...form.register('alternativeAddressLine3') }}
-          // @ts-ignore
           style={{ width: 'calc(max(66%, 16rem))' }}
         >
           Town or city (optional)
@@ -311,13 +328,14 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
           mb={4}
           meta={{ error: form.formState.errors.alternativeAddressPostcode?.message, touched: true }}
           input={{
-            autoComplete: 'postal-code', ...form.register('alternativeAddressPostcode', {
+            autoComplete: 'postal-code',
+            ...form.register('alternativeAddressPostcode', {
               validate: (s) => {
-                if (form.watch('useAlternativeAddress', false)) return validatePostcode(s)
-              }
-            })
+                if (form.watch('useAlternativeAddress', false)) return validatePostcode(s);
+                return undefined;
+              },
+            }),
           }}
-          // @ts-ignore
           style={{ width: '16rem' }}
         >
           Postcode
@@ -336,104 +354,108 @@ const PostalVoteFormPage1 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
           <option value="Other">Other</option>
         </Select>
 
-        {form.watch('alternativeAddressReason', '') === 'Other' && <>
-          <InputField
-            mb={4}
-            meta={{ error: form.formState.errors.alternativeAddressReasonOther?.message, touched: true }}
-            input={form.register('alternativeAddressReasonOther', {
-              validate: (s) => {
-                if (form.watch('useAlternativeAddress', false) && form.watch('alternativeAddressReason', '') === 'Other') return validateAlternativeAddressReasonOther(s)
-              }
-            })}
-          >
-            Your other reason
-          </InputField>
-        </>}
-      </>}
+        {form.watch('alternativeAddressReason', '') === 'Other' && (
+        <InputField
+          mb={4}
+          meta={{ error: form.formState.errors.alternativeAddressReasonOther?.message, touched: true }}
+          input={form.register('alternativeAddressReasonOther', {
+            validate: (s) => {
+              if (form.watch('useAlternativeAddress', false) && form.watch('alternativeAddressReason', '') === 'Other') return validateAlternativeAddressReasonOther(s);
+              return undefined;
+            },
+          })}
+        >
+          Your other reason
+        </InputField>
+        )}
+      </>
+      )}
 
       <Button
         margin={{ direction: 'top', size: 4 }}
         disabled={form.formState.isSubmitting}
         onClick={async (e) => {
-          e.preventDefault()
-          const valid = await form.trigger(PAGE_1_FIELDS)
+          e.preventDefault();
+          const valid = await form.trigger(PAGE_1_FIELDS);
           if (valid) {
-            navigate('/postal-vote-form/declaration')
+            navigate('/postal-vote-form/declaration');
           }
         }}
       >
         Continue
       </Button>
     </Fieldset>
-  )
-}
+  );
+};
 
 const PostalVoteFormPage2 = ({ form }: { form: UseFormReturn<TFieldValues> }) => {
-  const navigate = useNavigate()
-  const [pad, setPad] = React.useState<SignaturePadLib | null>(null)
+  const navigate = useNavigate();
+  const [pad, setPad] = React.useState<SignaturePadLib | null>(null);
 
   // Check we haven't jumped into the middle of the flow
   useEffect(() => {
     // By this point we should have a first name
     // If we don't, it probably means we jumped into the middle of the flow
     if (form.watch('firstName') === undefined) {
-      console.error('User appears to have started mid-flow... redirecting to earlier in flow')
-      navigate('/postal-vote-form/your-details')
+      console.error('User appears to have started mid-flow... redirecting to earlier in flow');
+      navigate('/postal-vote-form/your-details');
     }
-  }, [form, navigate])
-
+  }, [form, navigate]);
 
   // Register virtual form fields
   useEffect(() => {
     form.register('signatureProvided', {
       validate: (value) => {
         if (!value) {
-          if (navigator.maxTouchPoints > 0) return "Please provide your signature"
-          return "Please provide your signature. Hold down your left mouse button while moving your mouse in the box below to draw your signature."
+          if (navigator.maxTouchPoints > 0) return 'Please provide your signature';
+          return 'Please provide your signature. Hold down your left mouse button while moving your mouse in the box below to draw your signature.';
         }
-      }
-    })
-  }, [form])
+        return undefined;
+      },
+    });
+  }, [form]);
 
-  return (<Fieldset>
-    <Fieldset.Legend size="XLARGE" mb={4}>
-      Declaration
-    </Fieldset.Legend>
-    <HintText>Declaration: As far as I know, the details on this form are true and accurate.</HintText>
-    <HintText mb={6}>I understand that to provide false information on this form is an offence, punishable on conviction by imprisonment of up to two years and/or a fine.</HintText>
+  return (
+    <Fieldset>
+      <Fieldset.Legend size="XLARGE" mb={4}>
+        Declaration
+      </Fieldset.Legend>
+      <HintText>Declaration: As far as I know, the details on this form are true and accurate.</HintText>
+      <HintText mb={6}>I understand that to provide false information on this form is an offence, punishable on conviction by imprisonment of up to two years and/or a fine.</HintText>
 
-    <SignaturePad
-      meta={{ error: form.formState.errors.signatureProvided?.message }}
-      onLoad={setPad}
-      onTouchedChanged={(touched) => form.setValue('signatureProvided', touched)}
-    />
+      <SignaturePad
+        meta={{ error: form.formState.errors.signatureProvided?.message }}
+        onLoad={setPad}
+        onTouchedChanged={(touched) => form.setValue('signatureProvided', touched)}
+      />
 
-    <Details summary="I can't provide a signature">
-      <p>If you can't provide a signature or consistent signature due to a disability or inability to read or write, you should <Link href={`https://www.gov.uk/contact-electoral-registration-office?postcode=${encodeURIComponent(form.watch('addressPostcode'))}`} target="_blank" rel="noreferrer">contact your local electoral registration office</Link>.</p>
+      <Details summary="I can't provide a signature">
+        <p>If you can't provide a signature or consistent signature due to a disability or inability to read or write, you should <Link href={`https://www.gov.uk/contact-electoral-registration-office?postcode=${encodeURIComponent(form.watch('addressPostcode'))}`} target="_blank" rel="noreferrer">contact your local electoral registration office</Link>.</p>
 
-      <p>The Electoral Commision website has <Link href="https://www.electoralcommission.org.uk/running-electoral-registration-wales/absent-voting/postal-voting/signature-waivers-postal-vote-applications" target="_blank" rel="noreferrer">additional guidance about signature waivers for postal votes</Link>.</p>
-    </Details>
+        <p>The Electoral Commision website has <Link href="https://www.electoralcommission.org.uk/running-electoral-registration-wales/absent-voting/postal-voting/signature-waivers-postal-vote-applications" target="_blank" rel="noreferrer">additional guidance about signature waivers for postal votes</Link>.</p>
+      </Details>
 
-    <Button
-      margin={{ direction: 'top', size: 4 }}
-      disabled={form.formState.isSubmitting}
-      type="submit"
-      onClick={() => {
-        // we do this on submit rather than update for performance
-        if (pad) {
-          form.setValue('signatureDataUri', pad.toDataURL("image/png"))
-        }
+      <Button
+        margin={{ direction: 'top', size: 4 }}
+        disabled={form.formState.isSubmitting}
+        type="submit"
+        onClick={() => {
+          // we do this on submit rather than update for performance
+          if (pad) {
+            form.setValue('signatureDataUri', pad.toDataURL('image/png'));
+          }
 
-        // default action will then run after this and trigger submit of form
-      }}
-      mb={2}
-    >
-      Submit
-    </Button>
+          // default action will then run after this and trigger submit of form
+        }}
+        mb={2}
+      >
+        Submit
+      </Button>
 
-    <HintText style={{ fontSize: '75%' }}>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.</HintText>
-  </Fieldset>)
-}
+      <HintText style={{ fontSize: '75%' }}>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Terms of Service</a> apply.</HintText>
+    </Fieldset>
+  );
+};
 
 const Success = ({ councilName }: { councilName: string | null }) => {
   return (
@@ -444,32 +466,34 @@ const Success = ({ councilName }: { councilName: string | null }) => {
       <Paragraph>{`We’ve sent your application to ${councilName ?? 'your local'} electoral register office.`}</Paragraph>
       <Paragraph>They will contact you either to confirm your postal vote, or to ask for more information.</Paragraph>
     </>
-  )
-}
+  );
+};
 
 const Manual = ({ pdf, postcode }: { pdf: string, postcode: string }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Check we haven't jumped into the middle of the flow
   useEffect(() => {
     // By this point we should have a pdf and postcode
     // If we don't, it probably means we jumped into the middle of the flow
     if (!pdf || !postcode) {
-      console.error('User appears to have started mid-flow... redirecting to earlier in flow')
-      navigate('/postal-vote-form/your-details')
+      console.error('User appears to have started mid-flow... redirecting to earlier in flow');
+      navigate('/postal-vote-form/your-details');
     }
-  }, [pdf, postcode, navigate])
+  }, [pdf, postcode, navigate]);
 
   return (
     <>
       <Heading size="XLARGE">Sending your form</Heading>
       <Paragraph>We've prepared your postal vote application form. Download it and email or post it to your local electoral registration office.</Paragraph>
-      <Paragraph linkRenderer={({ href, children }) => <a href={href} target="_blank" rel="noreferrer">{children}</a>}>{`You can find their details on the [GOV.UK website](https://www.gov.uk/contact-electoral-registration-office?postcode=${encodeURIComponent(postcode)}).`}</Paragraph>
+      <Paragraph linkRenderer={LinkRenderer}>{`You can find their details on the [GOV.UK website](https://www.gov.uk/contact-electoral-registration-office?postcode=${encodeURIComponent(postcode)}).`}</Paragraph>
       <Paragraph>They will contact you either to confirm your postal vote, or to ask for more information.</Paragraph>
-      <Button as='a' download="postal-vote.pdf" href={`data:application/pdf;base64,${pdf}`}>Download form</Button>
+      <Button as="a" download="postal-vote.pdf" href={`data:application/pdf;base64,${pdf}`}>Download form</Button>
     </>
-  )
-}
+  );
+};
+
+const LinkRenderer: React.FC<React.PropsWithChildren<{ href: string }>> = ({ href, children }) => <a href={href} target="_blank" rel="noreferrer">{children}</a>;
 
 const SignaturePad = ({ onLoad, meta, onTouchedChanged }: { onLoad: (s: SignaturePadLib) => void, meta: { error?: string }, onTouchedChanged: (touched: boolean) => void }) => {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -478,63 +502,65 @@ const SignaturePad = ({ onLoad, meta, onTouchedChanged }: { onLoad: (s: Signatur
 
   React.useEffect(() => {
     if (canvasRef.current != null) {
-      const canvas = canvasRef.current
+      const canvas = canvasRef.current;
       const s = new SignaturePadLib(canvas, { minDistance: 1 });
-      s.on()
+      s.on();
       setPad(s);
 
-      return () => s.off()
+      return () => s.off();
     }
-  }, [])
+    return undefined;
+  }, []);
 
   React.useEffect(() => {
     if (pad && canvasRef.current) {
-      const canvas = canvasRef.current
+      const canvas = canvasRef.current;
 
-      onLoad(pad)
+      onLoad(pad);
 
       const onBeginStroke = () => {
-        setTouched(true)
-        onTouchedChanged(true)
-      }
-      pad.addEventListener('beginStroke', onBeginStroke)
+        setTouched(true);
+        onTouchedChanged(true);
+      };
+      pad.addEventListener('beginStroke', onBeginStroke);
 
       const resizeCanvas = () => {
         // Canvas not actually changing size
         if (canvas.width === canvas.offsetWidth) {
-          return
+          return;
         }
 
         // This part causes the canvas to be cleared
         canvas.width = canvas.offsetWidth;
         canvas.height = canvas.offsetWidth / 3.24324324;
-        canvas.getContext("2d")?.scale(1, 1);
+        canvas.getContext('2d')?.scale(1, 1);
 
         // Resizing the canvas clears it. To make the state of the SignaturePadLib
         // consistent with the canvas, we clear it manually.
         pad.clear();
-        setTouched(false)
-        onTouchedChanged(false)
-      }
+        setTouched(false);
+        onTouchedChanged(false);
+      };
 
       window.addEventListener('resize', resizeCanvas);
       resizeCanvas();
 
       return () => {
-        pad.removeEventListener('beginStroke', onBeginStroke)
-        window.removeEventListener('resize', resizeCanvas)
-      }
+        pad.removeEventListener('beginStroke', onBeginStroke);
+        window.removeEventListener('resize', resizeCanvas);
+      };
     }
-  }, [pad, onLoad, onTouchedChanged])
+    return undefined;
+  }, [pad, onLoad, onTouchedChanged]);
 
-  return <>
+  return (
     <div>
       <FormGroup error={!!meta.error}>
         <LabelText>
           Signature
         </LabelText>
         <HintText>
-          {navigator.maxTouchPoints > 0 ? "Touch" : "Click in"} and draw your signature in the box below
+          {navigator.maxTouchPoints > 0 ? 'Touch' : 'Click in'} and draw your signature in the box below
         </HintText>
         {meta.error && <ErrorText>{meta.error}</ErrorText>}
         <div style={{
@@ -542,8 +568,9 @@ const SignaturePad = ({ onLoad, meta, onTouchedChanged }: { onLoad: (s: Signatur
           // The FormGroup error makes the div 20px narrower. To prevent this changing the width of the
           // signature box (and therefore us needing to recalculate and wipe it beacuse of the resize)
           // we alternately toggle some extra margin on the right, so the signature box stays constant size
-          marginRight: meta.error ? '0' : '20px'
-        }}>
+          marginRight: meta.error ? '0' : '20px',
+        }}
+        >
           <div style={{ width: 'calc(100%)', aspectRatio: '600 / 185' }}>
             <canvas
               ref={canvasRef}
@@ -563,19 +590,19 @@ const SignaturePad = ({ onLoad, meta, onTouchedChanged }: { onLoad: (s: Signatur
           buttonTextColour="#0b0c0c"
           disabled={!touched}
           onClick={(e) => {
-            e.preventDefault()
+            e.preventDefault();
             if (pad) {
-              pad.clear()
+              pad.clear();
             }
-            setTouched(false)
-            onTouchedChanged(false)
+            setTouched(false);
+            onTouchedChanged(false);
           }}
         >
           Clear signature
         </Button>
       </FormGroup>
     </div>
-  </>
-}
+  );
+};
 
-export default PostalVoteForm
+export default PostalVoteForm;

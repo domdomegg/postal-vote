@@ -1,10 +1,12 @@
-import { Button, Fieldset, MultiChoice, Radio } from "govuk-react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  Button, Fieldset, MultiChoice, Radio,
+} from 'govuk-react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 const CountryForm = ({ onNonNI, onNI }: { onNonNI: () => void, onNI: () => void }) => {
   type TFieldValues = {
     country: 'England' | 'Scotland' | 'Wales' | 'Northern Ireland'
-  }
+  };
 
   const {
     register,
@@ -12,14 +14,14 @@ const CountryForm = ({ onNonNI, onNI }: { onNonNI: () => void, onNI: () => void 
     formState: { errors, submitCount, isSubmitting },
   } = useForm<TFieldValues>({
     reValidateMode: 'onSubmit',
-  })
+  });
 
-  const validateAnswered = (value?: string): string | undefined => value?.length ? undefined : 'Please select an option';
+  const validateAnswered = (value?: string): string | undefined => (value?.length ? undefined : 'Please select an option');
 
   const onSubmit: SubmitHandler<TFieldValues> = ({ country }) => {
-    if (country === 'Northern Ireland') return onNI()
-    return onNonNI()
-  }
+    if (country === 'Northern Ireland') return onNI();
+    return onNonNI();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +73,7 @@ const CountryForm = ({ onNonNI, onNI }: { onNonNI: () => void, onNI: () => void 
         </Button>
       </Fieldset>
     </form>
-  )
-}
+  );
+};
 
-export default CountryForm
+export default CountryForm;

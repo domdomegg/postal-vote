@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import * as aws from '@aws-sdk/client-ses'
-import { NodeHttpHandler } from '@aws-sdk/node-http-handler'
+import { NodeHttpHandler } from '@smithy/node-http-handler'
 import env from './env/env'
 
 const requestHandler = new NodeHttpHandler({

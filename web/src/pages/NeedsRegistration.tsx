@@ -1,4 +1,4 @@
-import { Button, Heading, Paragraph } from "govuk-react"
+import { Button, Heading, Paragraph } from 'govuk-react';
 
 const NeedsRegistration = () => {
   return (
@@ -7,11 +7,11 @@ const NeedsRegistration = () => {
       <Paragraph>You must register before applying for a postal vote. The deadline to register to vote is midnight, 12 working days before the poll.</Paragraph>
       <Paragraph>If you're not sure if you are registered to vote, you should register again.</Paragraph>
       <Paragraph>You can come back to this service once you have registered to vote.</Paragraph>
-      <Button as='a' href="https://www.gov.uk/register-to-vote" target="_blank" rel="noreferrer" style={{ display: 'inline-flex' }}>
+      <Button as="a" href="https://www.gov.uk/register-to-vote" target="_blank" rel="noreferrer" style={{ display: 'inline-flex' }}>
         Register to vote
       </Button>
     </>
-  )
-}
+  );
+};
 
-export default NeedsRegistration
+export default NeedsRegistration;

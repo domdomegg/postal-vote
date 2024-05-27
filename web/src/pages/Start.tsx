@@ -1,4 +1,6 @@
-import { Button, ButtonArrow, Heading, Paragraph } from "govuk-react";
+import {
+  Button, ButtonArrow, Heading, Paragraph,
+} from 'govuk-react';
 
 const Start = ({ onStart }: { onStart: () => void }) => (
   <>
@@ -12,6 +14,6 @@ const Start = ({ onStart }: { onStart: () => void }) => (
       Start now
     </Button>
   </>
-)
+);
 
-export default Start
+export default Start;
