@@ -36,7 +36,8 @@
     "build:local": "cp src/env/local.ts src/env/env.ts && react-scripts build",
     "build:dev": "cp src/env/dev.ts src/env/env.ts && react-scripts build",
     "build:prod": "cp src/env/prod.ts src/env/env.ts && react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll=false",
+    "test:watch": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "homepage": ".",
