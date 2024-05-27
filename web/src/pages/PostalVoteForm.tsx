@@ -106,7 +106,9 @@ const PostalVoteForm = () => {
       setPdf(content.pdf);
       navigate('/postal-vote-form/manual');
     } else {
+      // eslint-disable-next-line no-alert
       alert(`Error: status ${submitResponse.status} from API, with body: ${JSON.stringify(content)}.`);
+      // eslint-disable-next-line no-console
       console.error(submitResponse);
     }
   };
@@ -397,6 +399,7 @@ const PostalVoteFormPage2 = ({ form }: { form: UseFormReturn<TFieldValues> }) =>
     // By this point we should have a first name
     // If we don't, it probably means we jumped into the middle of the flow
     if (form.watch('firstName') === undefined) {
+      // eslint-disable-next-line no-console
       console.error('User appears to have started mid-flow... redirecting to earlier in flow');
       navigate('/postal-vote-form/your-details');
     }
@@ -477,6 +480,7 @@ const Manual = ({ pdf, postcode }: { pdf: string, postcode: string }) => {
     // By this point we should have a pdf and postcode
     // If we don't, it probably means we jumped into the middle of the flow
     if (!pdf || !postcode) {
+      // eslint-disable-next-line no-console
       console.error('User appears to have started mid-flow... redirecting to earlier in flow');
       navigate('/postal-vote-form/your-details');
     }
