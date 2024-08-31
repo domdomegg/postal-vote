@@ -22,7 +22,7 @@
         "@aws-sdk/client-ses": "^3.583.0",
         "@smithy/node-http-handler": "^3.0.0",
         "ajv": "^8.11.0",
-        "axios": "^1.6.0",
+        "axios": "^1.7.4",
         "http-errors": "^1.8.0",
         "nodemailer": "^6.9.9",
         "pdf-lib": "^1.17.1",
