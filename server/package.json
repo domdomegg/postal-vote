@@ -10,8 +10,8 @@
         "deploy:prod": "cp src/env/prod.ts src/env/env.ts && serverless deploy --verbose",
         "build": "npm run build:local",
         "build:local": "cp src/env/local.ts src/env/env.ts && serverless package",
-        "test": "TZ=utc jest",
-        "test:watch": "TZ=utc jest --watch",
+        "test": "TZ=utc vitest run",
+        "test:watch": "TZ=utc vitest",
         "type-check": "tsc",
         "lint": "eslint 'src/**/*.ts' 'serverless.ts'"
     },
@@ -32,7 +32,6 @@
         "@serverless/typescript": "^3.38.0",
         "@types/aws-lambda": "^8.10.71",
         "@types/http-errors": "^1.8.1",
-        "@types/jest": "^27.0.2",
         "@types/node": "^14.14.25",
         "@types/nodemailer": "^6.4.4",
         "@typescript-eslint/eslint-plugin": "^4.32.0",
@@ -42,26 +41,16 @@
         "eslint": "^7.32.0",
         "eslint-config-blvd": "^1.2.1",
         "fork-ts-checker-webpack-plugin": "^7.2.11",
-        "jest": "^27.3.1",
-        "serverless": "^3.38.0",
+        "osls": "^3.76.1",
         "serverless-offline": "^13.6.0",
         "serverless-offline-ses-v2": "^1.0.4",
-        "serverless-webpack": "^5.14.0",
+        "serverless-webpack": "^5.15.4",
         "shx": "^0.3.4",
-        "ts-jest": "^27.0.7",
         "ts-loader": "^9.5.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.4.5",
+        "vitest": "^4.1.8",
         "webpack": "^5.94.0",
         "webpack-node-externals": "^3.0.0"
-    },
-    "jest": {
-        "preset": "ts-jest",
-        "testEnvironment": "node",
-        "collectCoverageFrom": [
-            "src/**/*.ts",
-            "!src/env/*.ts",
-            "src/env/env.ts"
-        ]
     }
 }

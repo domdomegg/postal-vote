@@ -1,17 +1,18 @@
-
 {
     "name": "postal-vote",
     "workspaces": [
-      "server",
-      "web"
+        "server",
+        "web"
     ],
     "private": true,
     "scripts": {
-      "postinstall": "npm run postinstall --workspaces --if-present",
-      "start": "npm run start --workspaces --if-present",
-      "test": "npm run test --workspaces --if-present",
-      "lint": "npm run lint --workspaces --if-present",
-      "build": "npm run build --workspaces --if-present"
+        "postinstall": "npm run postinstall --workspaces --if-present",
+        "start": "npm run start --workspaces --if-present",
+        "test": "npm run test --workspaces --if-present",
+        "lint": "npm run lint --workspaces --if-present",
+        "build": "npm run build --workspaces --if-present"
+    },
+    "overrides": {
+        "serverless": "npm:osls@^3.76.1"
     }
-  }
-  
+}

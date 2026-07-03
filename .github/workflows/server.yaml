@@ -5,22 +5,33 @@ on:
     paths:
       - ".github/workflows/server.yaml"
       - "server/**"
+      - "package.json"
+      - "package-lock.json"
+
+permissions:
+  contents: read
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      matrix:
-        node-version: [16]
+    # Only master pushes deploy, and only the deploy needs to mint OIDC tokens —
+    # but build+deploy share this job, so the job carries the permission. The
+    # role trust is pinned to this repo's master ref in aws-shared-infra.
+    permissions:
+      id-token: write
+      contents: read
+    concurrency:
+      group: deploy-dev
+      cancel-in-progress: false
 
     steps:
       - name: Checkout ${{ github.sha }}
-        uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 24
 
       - name: "Install dependencies"
         run: npm ci
@@ -31,7 +42,7 @@ jobs:
         run: npm run build
         working-directory: server
       - name: "Test"
-        run: npm run test -- --verbose
+        run: npm run test
         working-directory: server
 
       - name: "Retrieve env for dev environment"
@@ -39,10 +50,13 @@ jobs:
         run: echo "$DEV_ENV" > server/src/env/dev.ts
         env:
           DEV_ENV: ${{ secrets.DEV_ENV }}
+      - name: Configure AWS credentials (OIDC)
+        if: github.ref == 'refs/heads/master'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::338337944728:role/postal-vote-ci
+          aws-region: eu-west-1
       - name: "Deploy to dev environment"
         if: github.ref == 'refs/heads/master'
         run: npm run deploy:dev
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         working-directory: server
