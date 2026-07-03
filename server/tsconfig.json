@@ -12,7 +12,11 @@
         "moduleResolution": "node",
         "noEmit": true,
         "sourceMap": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "types": [
+            "vitest/globals",
+            "node"
+        ]
     },
     "include": [
         "src/**/*.ts",
