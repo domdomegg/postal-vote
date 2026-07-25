@@ -18,9 +18,15 @@ jobs:
     permissions:
       id-token: write
       contents: write
+    # Deploys must serialize on a single shared slot, but non-master runs only
+    # build and test — they share no state, so they must not queue against it.
+    # A global group made every PR contend for `deploy-dev`, and a queued run
+    # evicts another queued run regardless of cancel-in-progress, so batches of
+    # Dependabot PRs cancelled each other with "a higher priority waiting
+    # request for deploy-dev exists".
     concurrency:
-      group: deploy-dev
-      cancel-in-progress: false
+      group: ${{ github.ref == 'refs/heads/master' && 'deploy-dev' || format('ci-{0}', github.ref) }}
+      cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
 
     steps:
       - name: Checkout ${{ github.sha }}

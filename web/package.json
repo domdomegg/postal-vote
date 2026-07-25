@@ -41,6 +41,11 @@
     "eject": "react-scripts eject"
   },
   "homepage": ".",
+  "jest": {
+    "moduleNameMapper": {
+      "^react-router/dom$": "react-router/dist/development/dom-export.js"
+    }
+  },
   "browserslist": {
     "production": [
       ">0.2%",
