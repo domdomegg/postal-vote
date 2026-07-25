@@ -11,7 +11,7 @@ test('clicking button triggers onStart', async () => {
   const user = userEvent.setup();
 
   // Given... start page with callback
-  const onStart = jest.fn();
+  const onStart = vi.fn();
   render(<Start onStart={onStart} />);
 
   // Then... callback not automatically called
