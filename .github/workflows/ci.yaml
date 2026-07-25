@@ -1,33 +1,22 @@
+# Structured to match the centrally managed templates:
+# https://github.com/domdomegg/domdomegg/blob/master/file-sync/node-gh-pages.yaml
+# Kept as a bespoke file because this repo deploys two things from one commit —
+# the server to AWS Lambda and the web build to GitHub Pages — which neither
+# template covers.
+
 name: ci
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
   pull_request:
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    # Only master pushes deploy, and only the deploys need these permissions —
-    # id-token to mint the GitHub OIDC token used to assume the AWS role (the
-    # role trust is pinned to this repo's master ref in aws-shared-infra), and
-    # contents to push the web build to the gh-pages branch. Build+deploy share
-    # this job, so the job carries the permissions.
-    permissions:
-      id-token: write
-      contents: write
-    # Deploys must serialize on a single shared slot, but non-master runs only
-    # build and test — they share no state, so they must not queue against it.
-    # A global group made every PR contend for `deploy-dev`, and a queued run
-    # evicts another queued run regardless of cancel-in-progress, so batches of
-    # Dependabot PRs cancelled each other with "a higher priority waiting
-    # request for deploy-dev exists".
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/master' && 'deploy-dev' || format('ci-{0}', github.ref) }}
-      cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
-
+    env:
+      CI: true
     steps:
       - name: Checkout ${{ github.sha }}
         uses: actions/checkout@v4
@@ -40,26 +29,54 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Lint
-        run: npm run lint
+        run: npm run lint --if-present
       - name: Build
-        run: npm run build
+        run: npm run build --if-present
       - name: Test
-        run: npm run test
+        run: npm run test --if-present
+
+  # Split from ci so that the deploy concurrency group below applies only to
+  # master. While both lived in one job, every PR joined the deploy group and
+  # batches of Dependabot PRs evicted each other from the queue — a queued run
+  # displaces another queued run regardless of cancel-in-progress.
+  deploy:
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # id-token mints the GitHub OIDC token used to assume the AWS role (trust is
+    # pinned to this repo's master ref in aws-shared-infra); contents pushes the
+    # web build to the gh-pages branch.
+    permissions:
+      id-token: write
+      contents: write
+    concurrency:
+      group: deploy-dev
+      cancel-in-progress: false
+    env:
+      CI: true
+    steps:
+      - name: Checkout ${{ github.sha }}
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
 
       # Deployment to dev environment (server)
       - name: "server: Retrieve env for dev environment"
-        if: github.ref == 'refs/heads/master'
         run: echo "$DEV_ENV" > server/src/env/dev.ts
         env:
           DEV_ENV: ${{ secrets.DEV_ENV }}
       - name: Configure AWS credentials (OIDC)
-        if: github.ref == 'refs/heads/master'
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::338337944728:role/postal-vote-ci
           aws-region: eu-west-1
       - name: "server: Deploy to dev environment"
-        if: github.ref == 'refs/heads/master'
         run: npm run deploy:dev
         working-directory: server
 
@@ -67,11 +84,9 @@ jobs:
       # longer a dev web deploy: postal-vote-dev is archived and the GH_PAT
       # secret it relied on no longer exists.
       - name: "web: Build for prod environment"
-        if: github.ref == 'refs/heads/master'
         run: npm run build:prod
         working-directory: web
       - name: "web: Deploy to prod environment"
-        if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
