@@ -28,7 +28,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "jsdom": "^26.1.0",
     "shx": "^0.3.4",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "scripts": {
     "postinstall": "shx cp -n src/env/local.template.ts src/env/local.ts && shx cp -n src/env/local.ts src/env/env.ts",
