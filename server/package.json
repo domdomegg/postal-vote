@@ -19,12 +19,12 @@
         "node": ">=14.15.0"
     },
     "dependencies": {
-        "@aws-sdk/client-ses": "^3.583.0",
+        "@aws-sdk/client-sesv2": "^3.1152.0",
         "@smithy/node-http-handler": "^3.0.0",
         "ajv": "^8.11.0",
         "axios": "^1.20.0",
         "http-errors": "^1.8.0",
-        "nodemailer": "^9.1.1",
+        "nodemailer": "^10.0.9",
         "pdf-lib": "^1.17.1",
         "source-map-support": "^0.5.21"
     },

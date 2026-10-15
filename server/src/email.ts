@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import * as aws from '@aws-sdk/client-ses'
+import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2'
 import { NodeHttpHandler } from '@smithy/node-http-handler'
 import env from './env/env'
 
@@ -8,16 +8,15 @@ const requestHandler = new NodeHttpHandler({
     socketTimeout: 30_000,
 })
 
-const ses = env.STAGE === 'local'
-    ? new aws.SES({
-        apiVersion: '2010-12-01',
+const sesClient = env.STAGE === 'local'
+    ? new SESv2Client({
         requestHandler,
         region: 'localhost',
         endpoint: 'http://localhost:8005',
         credentials: { accessKeyId: 'DEFAULT_ACCESS_KEY', secretAccessKey: 'DEFAULT_SECRET' },
     })
-    : new aws.SES({ requestHandler })
+    : new SESv2Client({ requestHandler })
 
 export const transporter = nodemailer.createTransport({
-    SES: { ses, aws },
+    SES: { sesClient, SendEmailCommand },
 })
